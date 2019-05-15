@@ -34,6 +34,8 @@ var fileNameComponentOrder;
 var prefixPageTitleInFileName;
 var fileNameComponentSeparator = '-';
 var urlInFile;
+var titleInFile;
+var dateInFile;
 var directorySelectionDialog;
 var notifications;
 var conflictAction;
@@ -64,19 +66,33 @@ function sanitizeFileName(fileName) {
 }
 
 function createFileContents(selectionText, callback) {
-  if (urlInFile) {
+  
     browser.tabs.query({
       active: true,
       lastFocusedWindow: true
     }, function(tabs) {
-      var url = tabs[0].url;
-      var text = url + '\n\n' + selectionText;
-      callback(text);
+      //var url = tabs[0].url;
+      var text=selectionText;
+      var content_url="";
+      var content_title="";
+      var content_date="";
+      if(urlInFile){
+        //text = url + "\n\n" + '==title here==\n' + tabs[0].title + '\n\n' + selectionText;
+        content_url=tabs[0].url+"\n\n";
+      }
+      if(titleInFile){
+        //text = "\n\n" + '==title here==\n' + tabs[0].title + '\n\n' + selectionText;
+        content_title= "===== " + tabs[0].title+" =====" + "\n\n";
+      }
+      if(dateInFile){
+        //text = "\n\n" + '==Current Date==\n' + tabs[0].title + '\n\n' + selectionText;
+        content_date= "===== " + (new Date()).toString()+ " =====" +"\n\n";
+      }
+      
+      callback(content_url+content_title+content_date+text);
     });
-  } else {
-    callback(selectionText);
-  }
 }
+
 
 function createFileName(callback) {
   var fileName = '';
@@ -214,6 +230,8 @@ browser.storage.sync.get({
   prefixPageTitleInFileName: false,
   fileNameComponentSeparator: '-',
   urlInFile: false,
+  titleInFile: false,
+  dateInFile: false,
   directorySelectionDialog: false,
   notifications: true,
   conflictAction: 'uniquify'
@@ -224,6 +242,8 @@ browser.storage.sync.get({
   prefixPageTitleInFileName = items.prefixPageTitleInFileName;
   fileNameComponentSeparator: items.fileNameComponentSeparator;
   urlInFile = items.urlInFile;
+  titleInFile = items.titleInFile;
+  dateInFile = items.dateInFile;
   directorySelectionDialog = items.directorySelectionDialog;
   notifications = items.notifications;
   conflictAction = items.conflictAction;

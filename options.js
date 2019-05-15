@@ -23,6 +23,8 @@ function saveOptions() {
     prefixPageTitleInFileName: document.getElementById('prefixPageTitleInFileName').checked,
     fileNameComponentSeparator: document.getElementById('fileNameComponentSeparator').value,
     urlInFile: document.getElementById('urlInFile').checked,
+    titleInFile: document.getElementById('titleInFile').checked,
+    dateInFile: document.getElementById('dateInFile').checked,
     directorySelectionDialog: document.getElementById('directorySelectionDialog').checked,
     notifications: document.getElementById('notifications').checked,
     conflictAction: document.getElementById('conflictAction').value
@@ -45,6 +47,8 @@ function restoreOptions() {
     prefixPageTitleInFileName: false,
     fileNameComponentSeparator: '-',
     urlInFile: false,
+    titleInFile: false,
+    dateInFile: false,
     directorySelectionDialog: false,
     notifications: true,
     conflictAction: 'uniquify'
@@ -55,6 +59,8 @@ function restoreOptions() {
     document.getElementById('prefixPageTitleInFileName').checked = items.prefixPageTitleInFileName;
     document.getElementById('fileNameComponentSeparator').value = items.fileNameComponentSeparator;
     document.getElementById('urlInFile').checked = items.urlInFile;
+    document.getElementById('titleInFile').checked = items.titleInFile;
+    document.getElementById('dateInFile').checked = items.dateInFile;
     document.getElementById('directorySelectionDialog').checked = items.directorySelectionDialog;
     document.getElementById('notifications').checked = items.notifications;
     document.getElementById('conflictAction').value = items.conflictAction;
