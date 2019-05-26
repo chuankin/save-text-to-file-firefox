@@ -27,6 +27,7 @@ function saveOptions() {
     dateInFile: document.getElementById('dateInFile').checked,
     directorySelectionDialog: document.getElementById('directorySelectionDialog').checked,
     notifications: document.getElementById('notifications').checked,
+    fileFormat: document.getElementById('fileFormat').value,
     conflictAction: document.getElementById('conflictAction').value
   }, function() {
     var status = document.getElementById('status');
@@ -51,6 +52,7 @@ function restoreOptions() {
     dateInFile: false,
     directorySelectionDialog: false,
     notifications: true,
+    fileFormat: 'txt',
     conflictAction: 'uniquify'
   }, function(items) {
     document.getElementById('fileNamePrefix').value = items.fileNamePrefix;
@@ -63,6 +65,7 @@ function restoreOptions() {
     document.getElementById('dateInFile').checked = items.dateInFile;
     document.getElementById('directorySelectionDialog').checked = items.directorySelectionDialog;
     document.getElementById('notifications').checked = items.notifications;
+    document.getElementById('fileFormat').value = items.fileFormat;
     document.getElementById('conflictAction').value = items.conflictAction;
   });
 }

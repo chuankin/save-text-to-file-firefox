@@ -39,6 +39,13 @@ var dateInFile;
 var directorySelectionDialog;
 var notifications;
 var conflictAction;
+var fileFormat;
+
+browser.contextMenus.create({
+  id: MENU_ITEM_ID,
+  title: EXTENSION_TITLE,
+  contexts: ['selection']
+});
 
 function saveTextToFile(info) {
   chrome.tabs.executeScript({
@@ -66,7 +73,6 @@ function sanitizeFileName(fileName) {
 }
 
 function createFileContents(selectionText, callback) {
-  
     browser.tabs.query({
       active: true,
       lastFocusedWindow: true
@@ -77,20 +83,18 @@ function createFileContents(selectionText, callback) {
       var content_title="";
       var content_date="";
       if(urlInFile){
-        //text = url + "\n\n" + '==title here==\n' + tabs[0].title + '\n\n' + selectionText;
         content_url=tabs[0].url+"\n\n";
       }
       if(titleInFile){
-        //text = "\n\n" + '==title here==\n' + tabs[0].title + '\n\n' + selectionText;
         content_title= "===== " + tabs[0].title+" =====" + "\n\n";
       }
       if(dateInFile){
-        //text = "\n\n" + '==Current Date==\n' + tabs[0].title + '\n\n' + selectionText;
         content_date= "===== " + (new Date()).toString()+ " =====" +"\n\n";
+        console.log("checkpoint1",dateInFile);
       }
-      
-      callback(content_url+content_title+content_date+text);
+    callback(content_url + content_title + content_date + text);
     });
+    console.log("checkpoint2",createFileContents);
 }
 
 
@@ -121,7 +125,7 @@ function createFileName(callback) {
       callback(fileName);
     }
   });
-
+}
   function _getPageTitleToFileName(callback) {
     if (prefixPageTitleInFileName) {
       browser.tabs.query({
@@ -167,7 +171,10 @@ function createFileName(callback) {
   }
 
   function _getExtension() {
-    return '.txt';
+    if (fileFormat == 'txt') {
+     return '.txt';
+    } else if(fileFormat == 'html') {
+    return '.html';
   }
 }
 
@@ -198,14 +205,8 @@ function startDownloadOfTextToFile(url, fileName) {
       }
     }
   });
+  
 }
-
-browser.contextMenus.create({
-  id: MENU_ITEM_ID,
-  title: EXTENSION_TITLE,
-  contexts: ['selection']
-});
-
 browser.contextMenus.onClicked.addListener(function(info) {
   if (info.menuItemId === MENU_ITEM_ID) {
     saveTextToFile(info);
@@ -234,6 +235,7 @@ browser.storage.sync.get({
   dateInFile: false,
   directorySelectionDialog: false,
   notifications: true,
+  fileFormat: 'txt',
   conflictAction: 'uniquify'
 }, function(items) {
   fileNamePrefix = items.fileNamePrefix;
@@ -246,6 +248,7 @@ browser.storage.sync.get({
   dateInFile = items.dateInFile;
   directorySelectionDialog = items.directorySelectionDialog;
   notifications = items.notifications;
+  fileFormat = items.fileFormat;
   conflictAction = items.conflictAction;
 });
 
@@ -284,6 +287,7 @@ browser.storage.onChanged.addListener(function(changes) {
   _updateUrlInFileOnChange();
   _updateDirectorySelectionOnChange();
   _updateNotificationsOnChange();
+  _updatefileFormatOnChange();
   _updateConflictActionOnChange();
 
   function _updatePrefixOnChange() {
@@ -346,6 +350,13 @@ browser.storage.onChanged.addListener(function(changes) {
     if (changes.notifications) {
       if (changes.notifications.newValue !== changes.notifications.oldValue) {
         notifications = changes.notifications.newValue;
+      }
+    }
+  }
+  function _updatefileFormatOnChange() {
+    if (changes.fileFormat) {
+      if (changes.fileFormat.newValue !== changes.fileFormat.oldValue) {
+        fileFormat = changes.fileFormat.newValue;
       }
     }
   }
