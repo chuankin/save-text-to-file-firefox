@@ -82,19 +82,33 @@ function createFileContents(selectionText, callback) {
       var content_url="";
       var content_title="";
       var content_date="";
+
       if(urlInFile){
-        content_url=tabs[0].url+"\n\n";
+        if (fileFormat=='html') {
+        content_url= "<h1>URL<br>" + "<h3>" + tabs[0].url+"<br><br>\n\n";
+        } else {
+        content_url="URL\n" + tabs[0].url+"\n\n";
+        }
       }
       if(titleInFile){
-        content_title= "===== " + tabs[0].title+" =====" + "\n\n";
+        if (fileFormat=='html') {
+        content_title= "<h1>Webpage Title<br>" + "<h3>" + tabs[0].title+ "<br><br>";
+        } else {
+        content_title= "Webpage Title\n" + tabs[0].title+ "\n\n";
+        }
       }
       if(dateInFile){
-        content_date= "===== " + (new Date()).toString()+ " =====" +"\n\n";
+        if (fileFormat=='html') {
+        content_date=  "<h1>Date<br>" + "<h3>" + (new Date()).toString()+ "<br><br>\n\n<h1>Content:<br><h3>";
+        } else {
+        content_date= "Date\n" + (new Date()).toString()+ "\n\nContent:\n";
+        }
+
         console.log("checkpoint1",dateInFile);
       }
-    callback(content_url + content_title + content_date + text);
+    callback(content_title + content_url + content_date + text);
     });
-    console.log("checkpoint2",createFileContents);
+    console.log("checkpoint #2",createFileContents);
 }
 
 
