@@ -77,7 +77,6 @@ function createFileContents(selectionText, callback) {
       active: true,
       lastFocusedWindow: true
     }, function(tabs) {
-      //var url = tabs[0].url;
       var text=selectionText;
       var content_url="";
       var content_title="";
@@ -85,30 +84,29 @@ function createFileContents(selectionText, callback) {
 
       if(urlInFile){
         if (fileFormat=='html') {
-        content_url= "<h1>URL<br>" + "<h3>" + tabs[0].url+"<br><br>\n\n";
+        content_url= "<h1>URL</h1> " + "<p>" + tabs[0].url+" </p>\n\n";
         } else {
         content_url="URL\n" + tabs[0].url+"\n\n";
         }
       }
       if(titleInFile){
         if (fileFormat=='html') {
-        content_title= "<h1>Webpage Title<br>" + "<h3>" + tabs[0].title+ "<br><br>";
+        content_title= "<h1>Webpage Title</h1>" + "<p>" + tabs[0].title+ " </p>";
         } else {
         content_title= "Webpage Title\n" + tabs[0].title+ "\n\n";
         }
       }
       if(dateInFile){
         if (fileFormat=='html') {
-        content_date=  "<h1>Date<br>" + "<h3>" + (new Date()).toString()+ "<br><br>\n\n<h1>Content:<br><h3>";
+        content_date=  "<h1>Date</h1>" + "<p>" + (new Date()).toString()+ " </p> \n\n<h1>Content:</h1> <p>";
         } else {
         content_date= "Date\n" + (new Date()).toString()+ "\n\nContent:\n";
         }
 
-        console.log("checkpoint1",dateInFile);
+        console.log("checkpoint #1",dateInFile);
       }
     callback(content_title + content_url + content_date + text);
     });
-    console.log("checkpoint #2",createFileContents);
 }
 
 
